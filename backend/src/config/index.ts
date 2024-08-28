@@ -4,4 +4,5 @@ dotenv.config()
 export default {
     port: process.env.PORT,
     db: process.env.DB,
+    salt: process.env.SALT
 }

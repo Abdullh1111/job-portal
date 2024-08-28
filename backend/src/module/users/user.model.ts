@@ -1,6 +1,7 @@
 import { model, Schema } from "mongoose";
 import { TProfile, TUser } from "./user.interface";
-
+import bcrypt from 'bcrypt'
+import config from "../../config";
 const ProfileInfoSchema = new Schema<TProfile>({
     bio: {type: String},
     skills: {type: String},
@@ -18,6 +19,13 @@ const userSchema = new Schema<TUser>({
     profileInfo: ProfileInfoSchema
 },{
     timestamps: true
+})
+
+// pre-save function
+userSchema.pre('save',async function() {
+    const pass : string =await bcrypt.hash(this.password,Number(config.salt))
+
+    this.password = pass 
 })
 
 export const user = model("user",userSchema)
