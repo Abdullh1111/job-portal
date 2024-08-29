@@ -1,7 +1,9 @@
 import { model, Schema } from "mongoose";
-import { TProfile, TUser } from "./user.interface";
+import { TProfile, TUser, TUserMethod, TUserModel } from "./user.interface";
 import bcrypt from 'bcrypt'
 import config from "../../config";
+import jwt from 'jsonwebtoken'
+
 const ProfileInfoSchema = new Schema<TProfile>({
     bio: {type: String},
     skills: {type: String},
@@ -10,7 +12,7 @@ const ProfileInfoSchema = new Schema<TProfile>({
     company: {type: Schema.Types.ObjectId, ref: 'company'},
     profilePhoto: {type: String, default: ''}
 })
-const userSchema = new Schema<TUser>({
+const userSchema = new Schema<TUser,TUserModel,TUserMethod>({
     fullName: {type: String, required: true},
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
@@ -28,4 +30,9 @@ userSchema.pre('save',async function() {
     this.password = pass 
 })
 
-export const user = model("user",userSchema)
+// methods
+userSchema.method("token",function token(){
+    return jwt.sign({id:this._id,email:this.email,role: this.role},config.jwt_secret as string,{expiresIn: '30d'})
+})
+
+export const user = model<TUser,TUserModel>("user",userSchema)

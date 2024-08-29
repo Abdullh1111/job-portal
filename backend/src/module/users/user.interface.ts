@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { Model, Types } from "mongoose";
 export type TProfile = {
   bio: string;
   skills: string;
@@ -18,3 +18,9 @@ export type TUser = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type TUserMethod = {
+  token: () => string;
+};
+
+export type TUserModel = Model<TUser, {}, TUserMethod>;

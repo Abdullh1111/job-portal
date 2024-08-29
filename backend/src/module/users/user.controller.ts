@@ -14,7 +14,14 @@ const registration = catchAsync(async (req, res) => {
 // login
 const login = catchAsync(async (req, res) => {
     const result = await userService.login(req.body)
-    res.status(201).json({
+    const token = result.token()
+    
+    res.status(201).cookie('token',token,{
+        httpOnly: true,
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        secure: true, 
+        sameSite: true
+    }).json({
         success: true,
         message: "User login successfully",
         data: result
