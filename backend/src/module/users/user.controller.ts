@@ -39,7 +39,8 @@ const logout = catchAsync(async (req, res) => {
 
 // update Data
 const updateData = catchAsync(async (req, res) => {
-    const result = await userService.updateData(req.body)
+    const {email} = req.body.user
+    const result = await userService.updateData(req.body.update,email)
     res.status(201).json({
         success: true,
         message: "User created successfully",
