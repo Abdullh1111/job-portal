@@ -20,7 +20,7 @@ const login = catchAsync(async (req, res) => {
         httpOnly: true,
         maxAge: 30 * 24 * 60 * 60 * 1000,
         secure: true, 
-        sameSite: true
+        sameSite: "strict"
     }).json({
         success: true,
         message: "User login successfully",
@@ -28,7 +28,28 @@ const login = catchAsync(async (req, res) => {
     })
 })
 
+// logout
+const logout = catchAsync(async (req, res) => {
+    
+    res.status(201).clearCookie('token').json({
+        success: true,
+        message: "User logout successfully",
+    })
+})
+
+// update Data
+const updateData = catchAsync(async (req, res) => {
+    const result = await userService.updateData(req.body)
+    res.status(201).json({
+        success: true,
+        message: "User created successfully",
+        data: result
+    })
+})
+
 export default {
     registration,
-    login
+    login,
+    logout,
+    updateData
 }
