@@ -1,10 +1,10 @@
 import { Router } from "express";
 import userController from "./user.controller";
-import userExists from './../../middleware/user/register';
+import userExists from "./../../middleware/user/register";
 
-const userRouter = Router()
+const userRouter = Router();
 
-userRouter.post('/register',userExists,userController.registration)
-// userRouter.post('/login')
+userRouter.post("/register", userExists, userController.registration);
+userRouter.post("/login", userController.login);
 
-export default userRouter
+export default userRouter;
